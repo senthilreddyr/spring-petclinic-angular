@@ -1,0 +1,4 @@
+---
+# vars file for node
+node_path: "/tmp"
+node_version: "10"

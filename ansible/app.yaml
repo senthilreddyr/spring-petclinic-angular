@@ -1,0 +1,33 @@
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: true
+  vars:
+    backend_url: '{{ backend_url }}'
+  tasks:
+    - name: Backend Server Information
+      template:
+        src: environment.prod.ts.j2
+        dest: "../src/environments/environment.prod.ts"
+    - name: print environment.prod.ts
+      shell:
+        cmd: cat ../src/environments/environment.prod.ts
+    - name: Install packages based on package.json.
+      command: /usr/bin/npm install .
+      args:
+        chdir: "../"
+    - name: Build Package
+      command: ng build --prod --base-href=/ --deploy-url=/
+      args:
+        chdir: "../"
+    - name: pwd
+      command: pwd
+      args:
+        chdir: "../"
+    - name: ls
+      command: ls
+      args:
+        chdir: "../"
+    - name: ls dist
+      command: ls dist/
+      args:
+        chdir: "../"

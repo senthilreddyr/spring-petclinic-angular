@@ -1,0 +1,49 @@
+---
+# tasks file for frontend
+
+# - name: Install NPM packages
+#   npm: name="@angular/cli@8.0.3" state=present global=yes
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: ensure nginx is at the latest version
+  apt: name=nginx state=latest
+  become: yes
+
+- name: start nginx
+  service:
+      name: nginx
+      state: started
+
+- name: Create project directory in nginx root
+  file:
+    path: /usr/share/nginx/html/petclinic
+    state: directory
+
+- name: Copy dist directory
+  copy:
+    src: "/home/ubuntu/dist"
+    dest: "/usr/share/nginx/html/petclinic"
+    remote_src: yes
+
+- name: copy the nginx config file and restart nginx
+  copy:
+    src: nginx.cfg
+    dest: /etc/nginx/sites-available/static_site.cfg
+  become: yes
+
+- name: create symlink
+  file:
+    src: /etc/nginx/sites-available/static_site.cfg
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  become: yes
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+  become: yes
