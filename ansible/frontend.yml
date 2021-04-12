@@ -5,6 +5,6 @@
   become: yes
   gather_facts: False
   roles:
-    - base
+    # - base
     - node
     - frontend
