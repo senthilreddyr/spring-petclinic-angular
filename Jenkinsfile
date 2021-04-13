@@ -1,5 +1,5 @@
 podTemplate(label: 'mypod', containers: [
-    containerTemplate(name: 'ipacker',image: 'senthilreddy/anpm:latest', ttyEnabled: true, command: 'cat')
+    containerTemplate(name: 'packer',image: 'senthilreddy/anpm:latest', ttyEnabled: true, command: 'cat')
   ],
   volumes: [
     hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
@@ -15,8 +15,8 @@ podTemplate(label: 'mypod', containers: [
                 }
         }
     
-      stage('packer') {
-        container('ipacker') {
+      stage('Packer') {
+        container('packer') {
           withCredentials([usernamePassword(credentialsId: 'aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]){
             backend_url=sh(script:'aws elbv2 describe-load-balancers --region ap-south-1 | jq \'.LoadBalancers[] | select(.LoadBalancerName== "pet-be") | .DNSName\'',returnStdout: true)
             sh "npm install -g @angular/cli@latest"
