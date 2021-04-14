@@ -23,7 +23,8 @@ podTemplate(label: 'mypod', containers: [
             sh "mkdir dist"
             sh "packer build -var \"backend_url=${backend_url}\" ./packer.json"
             sh "echo ${backend_url}"
-            AMI_ID=sh(script:'cat manifest.json | jq -r .builds[0].artifact_id |  cut -d\':\' -f2',returnStdout: true)
+            sh 'cat manifest.json | jq -rc \'(.builds[0].artifact_id | split(":"))[1]\' > .ami'
+            AMI_ID = readFile('.ami').trim()
           }
 
         }
