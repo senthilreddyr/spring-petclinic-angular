@@ -23,9 +23,28 @@ podTemplate(label: 'mypod', containers: [
             sh "mkdir dist"
             sh "packer build -var \"backend_url=${backend_url}\" ./packer.json"
             sh "echo ${backend_url}"
-            sh "cat manifest.json | jq -r .builds[0].artifact_id |  cut -d':' -f2"
+            AMI_ID=sh(script:'cat manifest.json | jq -r .builds[0].artifact_id |  cut -d\':\' -f2',returnStdout: true)
           }
 
+        }
+      }
+    if (currentBuild.currentResult == 'SUCCESS') {
+      stage('Trigger deploy') 
+          script {
+            def USER_INPUT = input(
+                  message: 'User input required - Some Yes or No question?',
+                  parameters: [
+                          [$class: 'ChoiceParameterDefinition',
+                            choices: ['no','yes'].join('\n'),
+                            name: 'input',
+                            description: 'Menu - select box option']
+                  ])
+          if( "${USER_INPUT}" == "yes"){
+              echo "${AMI_ID}"
+              build job: 'pet_be_deploy', parameters: [string(name: 'ami_id', value: "${AMI_ID}")],
+          } else {
+              echo "No user input selected"
+          }
         }
       }
     }
