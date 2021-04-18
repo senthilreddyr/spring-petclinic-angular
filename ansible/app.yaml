@@ -19,15 +19,3 @@
       command: ng build --prod --base-href=/ --deploy-url=/
       args:
         chdir: "../"
-    - name: pwd
-      command: pwd
-      args:
-        chdir: "../"
-    - name: ls
-      command: ls
-      args:
-        chdir: "../"
-    - name: ls dist
-      command: ls dist/
-      args:
-        chdir: "../"
