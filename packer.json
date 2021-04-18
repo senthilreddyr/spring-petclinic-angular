@@ -30,9 +30,7 @@
         "type": "ansible-local",
         "playbook_file": "./ansible/frontend.yml",
         "role_paths": [
-          "ansible/roles/frontend",
-          "ansible/roles/base",
-          "ansible/roles/node"
+          "ansible/roles/frontend"
         ]
       }
     ],
